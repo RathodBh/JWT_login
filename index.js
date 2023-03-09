@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 // const ejs = require('ejs');
 const ms = require('mysql2/promise');
 const cookieParser = require('cookie-parser');
+require('dotenv').config()
 
 
 const app = express();
@@ -76,7 +77,7 @@ app.post('/login', async (req, res) => {
 
         if (checkPwd) {
             //login success
-            let token = jwt.sign({ id: sel[0].id, name: sel[0].name }, 'bhavesh');
+            let token = jwt.sign({ id: sel[0].id, name: sel[0].name }, process.env.SECRET_KEY);
 
             res.cookie('user', token);
 
@@ -92,7 +93,7 @@ app.post('/login', async (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    jwt.verify(req.cookies.user, 'bhavesh', async (err, decoded) => {
+    jwt.verify(req.cookies.user, process.env.SECRET_KEY, async (err, decoded) => {
         if (err) {
             res.render('login', { msg: '', emailErr: "You can't access without login", passErr: null });
         }
@@ -100,7 +101,7 @@ app.get('/', (req, res) => {
         let [sel] = await conn.query(`SELECT * FROM BH.jwt_login WHERE id = '${decoded.id}' and verify = '1'`);
 
         if (sel.length > 0) {
-            res.render("home", { msg: null, user: decoded.name });
+            res.render("home", { msg: "Login successfully...", user: decoded.name });
         } else {
             res.render("verify")
         }
@@ -114,7 +115,7 @@ app.get('/logout', (req, res) => {
     res.redirect('login');
 })
 app.get("/update", (req, res) => {
-    jwt.verify(req.cookies.user, 'bhavesh', async (err, decoded) => {
+    jwt.verify(req.cookies.user, process.env.SECRET_KEY, async (err, decoded) => {
         if (err) {
             res.render('login', { msg: '', emailErr: "You can't access without login", passErr: null });
         }
@@ -135,7 +136,7 @@ app.post("/update", async (req, res) => {
 
         if (checkPwd) {
             //login success
-            let token = jwt.sign({ id: sel[0].id, name: name }, 'bhavesh');
+            let token = jwt.sign({ id: sel[0].id, name: name }, process.env.SECRET_KEY);
 
             res.cookie('user', token);
 
@@ -172,14 +173,14 @@ app.get("/checkUsername", async (req, res) => {
 app.get("/verify", async (req, res) => {
     res.render("verify");
 })
-app.get("/verifyUserId", async (req, res) => {
 
-    jwt.verify(req.cookies.user, 'bhavesh', async (err, decoded) => {
+app.get("/verifyUserId", async (req, res) => {
+    jwt.verify(req.cookies.user, process.env.SECRET_KEY, async (err, decoded) => {
         let [sel] = await conn.query(`SELECT * FROM BH.jwt_login WHERE id = '${decoded.id}'`);
 
         if (sel.length > 0) {
             let [up] = await conn.query(`UPDATE BH.jwt_login set verify ='1' WHERE id = '${decoded.id}'`);
-            res.redirect("/");
+            res.render("home", { msg: "Your account is verified successfully", user: decoded.name });
         }
     })
 

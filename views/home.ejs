@@ -12,7 +12,6 @@
 
 <body>
     <div class="wrapper">
-
         <header id="header">
             <div class="container">
                 <div class="row">
@@ -37,15 +36,23 @@
                             </ul>
                         </nav>
                     </div>
-                    <!-- <div class="col w100 ">
-                        <div class="d-flex jcsb py-2">
-                         
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </header>
+        <% if(msg){ %>
+        <div class="container" id="msg">
+            <div class="row">
+                <div class="my-2 w100 col d-flex jcsb">
+                    <p class="t-green p-">
+                        <%= msg %>
+                    </p>
+                    
+                    <span class="cp border all-center br-50 bg-green t-white x20-20" onClick="document.querySelector('#msg').style.display = 'none'">X</span>
 
+                </div>
+            </div>
+        </div>
+        <% } %>
         <section id="hero" class="bg-light-gray">
             <div class="d-flex">
                 <div class="w65 all-center">
@@ -191,57 +198,54 @@
                     <div class="col col-2 px-2 d-flex jce alc">
                         <a class="link fs-18 cp fw-500 t-cyan t-right mx-1 p-05 br-50 logo-bg" onclick="portPrev()">
                             << </a>
-                                <a class="link fs-18 cp fw-500 t-cyan t-right mx-1 p-05 br-50 logo-bg" onclick="portNext()">>></a>
+                                <a class="link fs-18 cp fw-500 t-cyan t-right mx-1 p-05 br-50 logo-bg"
+                                    onclick="portNext()">>></a>
                     </div>
                 </div>
-                <!-- <div class="oh"> -->
-                    <div class="row my-2 fnw" id="portCard" data-cols="3">
-                        <div class="col ">
-                            <div class="port-card br-12 bs">
-                                <div class="port-img">
-                                    <img src="assets2/img/p1.png" alt="" class="w100">
-                                </div>
-                                <div class="port-info bs p-1">
-                                    <h6 class="fs-14 fw-500 t-blue">Website, Landing</h6>
-                                    <h4 class="fs-30 my-05 t-black">Website Project</h4>
-                                </div>
+                <div class="row my-2 fnw" id="portCard" data-cols="3">
+                    <div class="col ">
+                        <div class="port-card br-12 bs">
+                            <div class="port-img">
+                                <img src="assets2/img/p1.png" alt="" class="w100">
                             </div>
-                        </div>
-                        <div class="col ">
-                            <div class="port-card br-12 bs">
-                                <div class="port-img">
-                                    <img src="assets2/img/p2.png" alt="" class="w100">
-                                </div>
-                                <div class="port-info bs p-1">
-                                    <h6 class="fs-14 fw-500 t-blue">Dashboard UI/UX Design</h6>
-                                    <h4 class="fs-30 my-05 t-black">Dashboard Project</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col ">
-                            <div class="port-card br-12 bs">
-                                <!-- <div class="port-img"> -->
-                                    <img src="assets2/img/p3.png" alt="" class="w100">
-                                <!-- </div> -->
-                                <div class="port-info bs p-1">
-                                    <h6 class="fs-14 fw-500 t-blue">App, Mobile, iOs</h6>
-                                    <h4 class="fs-30 my-05 t-black">Apps Project</h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="port-card br-12 bs">
-                                <div class="port-img">
-                                    <img src="assets2/img/p2.png" alt="" class="w100">
-                                </div>
-                                <div class="port-info bs p-1">
-                                    <h6 class="fs-14 fw-500 t-blue">Illustration, Landing</h6>
-                                    <h4 class="fs-30 my-05 t-black">Illustration Project</h4>
-                                </div>
+                            <div class="port-info bs p-1">
+                                <h6 class="fs-14 fw-500 t-blue">Website, Landing</h6>
+                                <h4 class="fs-30 my-05 t-black">Website Project</h4>
                             </div>
                         </div>
                     </div>
-                <!-- </div>  -->
+                    <div class="col ">
+                        <div class="port-card br-12 bs">
+                            <div class="port-img">
+                                <img src="assets2/img/p2.png" alt="" class="w100">
+                            </div>
+                            <div class="port-info bs p-1">
+                                <h6 class="fs-14 fw-500 t-blue">Dashboard UI/UX Design</h6>
+                                <h4 class="fs-30 my-05 t-black">Dashboard Project</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col ">
+                        <div class="port-card br-12 bs">
+                            <img src="assets2/img/p3.png" alt="" class="w100">
+                            <div class="port-info bs p-1">
+                                <h6 class="fs-14 fw-500 t-blue">App, Mobile, iOs</h6>
+                                <h4 class="fs-30 my-05 t-black">Apps Project</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="port-card br-12 bs">
+                            <div class="port-img">
+                                <img src="assets2/img/p2.png" alt="" class="w100">
+                            </div>
+                            <div class="port-info bs p-1">
+                                <h6 class="fs-14 fw-500 t-blue">Illustration, Landing</h6>
+                                <h4 class="fs-30 my-05 t-black">Illustration Project</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </section>
@@ -256,7 +260,8 @@
                     <div class="col col-2 px-2 d-flex jce alc">
                         <a class="link fs-18 cp fw-500 t-cyan t-right mx-1 p-05 br-50 logo-bg" onclick="testPrev()">
                             << </a>
-                                <a class="link fs-18 cp fw-500 t-cyan t-right mx-1 p-05 br-50 logo-bg" onclick="testNext()">>></a>
+                                <a class="link fs-18 cp fw-500 t-cyan t-right mx-1 p-05 br-50 logo-bg"
+                                    onclick="testNext()">>></a>
                     </div>
                 </div>
                 <div class="row my-2 fnw" id="testimonials-cards" data-cols="2">
