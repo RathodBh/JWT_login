@@ -1,0 +1,78 @@
+:root{
+    --green: #174F2A;
+    --gold: #A4843F;
+    --white : #ffffff;
+    --black: #000000;
+    --red : #FF0000;
+}
+
+.txt-green{
+    color: var(--green)
+}
+.txt-gold{
+    color: var(--gold)
+}
+.txt-white{
+    color: var(--white)
+}
+.txt-black{
+    color: var(--black)
+}
+.txt-red{
+    color: var(--red)
+}
+.back-green{
+    background: var(--green)
+}
+.back-gold{
+    background: var(--gold)
+}
+.back-white{
+    background: var(--white)
+}
+.back-black{
+    background: var(--black)
+}
+.back-red{
+    background: var(--red)
+}
+.back-trans{
+    background: rgba(0,0,0,0.7);
+}
+.bn{
+    border:none;
+    outline: none;
+}
+.mt-4{
+    margin-top: 4rem
+}
+/* sign up  */
+#signup,#signin{
+    min-height: 100vh;
+    background: url("../images/auth-bg.png");
+    /* overflow: hidden;; */
+}
+#signup .form-container,#signin .form-container{
+    /* min-height: 700px; */
+    /* max-height: 100vh; */
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+}
+.container{
+    position: relative;
+}
+#logo-bottom-container #logo-bottom{
+    position: absolute;
+    bottom: 50px;
+    right: 0;
+    height: 60px;
+}
+
+#btnSubmit[disabled=true],#btnSubmit[disabled=""]{
+    opacity: 0.4;
+    cursor:not-allowed
+}
+#btnSubmit[disabled=false]{
+    opacity: 1;
+    cursor: pointer;
+}

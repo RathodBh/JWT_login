@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Design-2</title>
+    <link rel="stylesheet" href="assets2/css/common.css">
+    <link rel="stylesheet" href="assets2/css/style.css">
+</head>
+
+<body>
+    <div class="wrapper">
+
+        <header id="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-3 col py-1">
+                        <img src="assets2/images/Logo.png" alt="">
+                    </div>
+                    <div class="col col-3 py-1 d-flex jcc">
+                        <a href="" class="link t-blue br-12 fw-700">Hello, <%= user %></a>
+                    </div>
+                    <div class="col col-3 d-flex jce py-1">
+                        <nav>
+                            <ul class="d-flex unstyled">
+                                <li class="ml-2">
+                                    <a href="/" class="link t-gray fw-500">Home</a>
+                                </li>
+                                <li class="ml-2">
+                                    <a href="/update" class="link t-black fw-700">Profile</a>
+                                </li>
+                                <li class="ml-2">
+                                    <a href="/logout" class="link t-gray fw-500">Logout</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <!-- <div class="col w100 ">
+                        <div class="d-flex jcsb py-2">
+                         
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </header>
+
+        <%- include("header") -%>
+
+    <section id="signup">
+        <div class="container" id="box">
+            <div class="row">
+                <div class="col col-2">
+                    <form class="form-container p-4" method="post" action="/update" id="frm">
+                       
+                        <h2 class="txt-white fs-24 fw-500 my-2">Update Profile</h2>
+
+                        <div class="my-1">
+                            <label for="name" class="my-05 dib txt-white">Name</label>
+                            <input type="text" class="w100 p-1" id="name" name="name" value="<%= data.name %>" required>
+                        </div>
+                        <div class="my-1">
+                            <label for="email" class="my-05 dib txt-white">Email</label>
+                            <input type="email" class="w100 p-1" id="email" name="email" value="<%= data.email %>" readonly required>
+                        </div>
+                        <div class="my-1">
+                            <label for="pwd" class="my-05 dib txt-white">Old Password</label>
+                            <input type="password" class="w100 p-1" id="pwd" name="pwd" required>
+                            <span class="db txt-red fs-14 py-05"><%= error %></span>
+
+                        </div>
+                        <div class="my-1">
+                            <label for="cpwd" class="my-05 dib txt-white">New Password</label>
+                            <input type="password" class="w100 p-1" id="cpwd" name="cpwd" required>
+                            <span class="db txt-red fs-14 py-05" id="passErr"></span>
+                        </div>
+
+                        <input type="submit" value="UPDATE" class="w100 p-1 my-1 back-green txt-white bn cp">
+                        
+                    </form>
+                </div>
+                <div class="col col-2" id="logo-bottom-container">
+                    <img src="assets/images/bou.svg" alt="" id="logo-bottom">
+                    </div>
+                </div>
+        </div>
+    </section>
+    <script>
+        frm.addEventListener('submit', function (e) {
+            let pwd = document.querySelector("#cpwd").value;
+            let passErr = document.querySelector("#passErr");
+            e.preventDefault();
+
+            let a = 0;
+
+            if (pwd.length >= 6) ++a;
+
+            if (pwd.length < 6){
+                passErr.innerText = "Password shold be atleast 6 characters long"
+            }
+
+            if (a == 1)
+                frm.submit()
+
+        })
+    </script>
+    <%- include("footer") -%>
+
+        <footer class="py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="inner-content">
+
+                            <div class="top-bar">
+                                <img src="assets2/images/logo-white.png" alt="" class="">
+                            </div>
+                            <span class="db t-gray my-1">Build a modern and creative website with crealand</span>
+                            <ul class="d-flex unstyled">
+                                <li>
+                                    <a href="" class="link mr-1"><img src="assets2/images/google.png" alt=""></a>
+                                </li>
+                                <li>
+                                    <a href="" class="link mx-1"><img src="assets2/images/twitter.png" alt=""></a>
+                                </li>
+                                <li>
+                                    <a href="" class="link mx-1"><img src="assets2/images/instagram.png" alt=""></a>
+                                </li>
+                                <li>
+                                    <a href="" class="link mx-1"><img src="assets2/images/linkedin.png" alt=""></a>
+                                </li>
+                                <li>
+                                    <a href="" class="link mx-1"><img src="assets2/images/youtube.png" alt=""></a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="col-5 d-flex jcc als">
+                        <div class="inner-content">
+
+                            <div class="top-bar">
+                                <h3 class="fw-700 t-gray">Product</h3>
+                            </div>
+                            <ul class="d-flex fc unstyled">
+                                <li>
+                                    <a href="" class="link t-gray ">Landingpage</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Features</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Documentation</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Referral Program</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Pricing</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="col-5 d-flex jcc als">
+                        <div class="inner-content">
+                            <div class="top-bar">
+
+                                <h3 class="fw-700 t-gray ">Services</h3>
+                            </div>
+                            <ul class="d-flex fc unstyled">
+                                <li>
+                                    <a href="" class="link t-gray ">Documentation</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Design</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Themes</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Illustrations</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">UI Kit</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="col-5 d-flex jcc als">
+                        <div class="inner-content">
+
+                            <div class="top-bar">
+                                <h3 class="fw-700 t-gray">Company</h3>
+                            </div>
+                            <ul class="d-flex fc unstyled">
+                                <li>
+                                    <a href="" class="link t-gray">About</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Terms</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Privacy Policy</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Careers</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="col-5 d-flex jcc als">
+                        <div class="inner-content">
+
+                            <div class="top-bar">
+                                <h3 class="fw-700 t-gray my-1">More</h3>
+                            </div>
+                            <ul class="d-flex fc unstyled">
+                                <li>
+                                    <a href="" class="link t-gray ">Documentation</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">License</a>
+                                </li>
+                                <li>
+                                    <a href="" class="link t-gray">Changelog</a>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row my-4">
+                    <div class="col w100 all-center fc">
+                        <div class="oval my-2">
+                            <img src="assets2/images/heart.png" alt="">
+                        </div>
+                        <h6 class="t-gray fs-14">Copyright&copy;2023. Made by BH</h6>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="assets2/js/script.js"></script>
+</body>
+
+</html>
