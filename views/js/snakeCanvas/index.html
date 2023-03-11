@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>snake</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,700;0,900;1,200&family=Raleway:ital,wght@0,300;0,500;0,900;1,100;1,700&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Poppins;
+}
+
+body {
+    background: linear-gradient(to bottom right, orange, white);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    overflow: hidden;
+    /* position:relative; */
+}
+.upper,
+.bottom {
+    /* height: 30px; */
+    padding: 10px
+}
+
+.upper {
+    display: flex;
+    justify-content: space-between;
+}
+
+canvas,
+.level {
+    border: 1px solid transparent
+}
+
+#score,
+#high-score,
+.red {
+    text-decoration: none;
+    color: red;
+    font-family: Raleway;
+    font-size: larger;
+}
+
+.bottom {
+    text-align: center
+}
+
+.red {
+    color: gray;
+    font-size: smaller;
+    transition: color 0.6s ease-in;
+}
+
+.red:hover {
+    color: rgb(219, 91, 91);
+}
+
+.level {
+    width: 70vw;
+    height: fit-content;
+    padding: 20px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.028), 0 0 10px 15px rgba(0, 0, 0, 0.03);
+
+}
+
+.box {
+    z-index: 3333;
+    height: fit-content;
+    padding: 20px 0px;
+    width: 100%;
+    height: 100%;
+    /* border: 1px solid rgb(45, 98, 147); */
+    /* box-shadow: 0 0 13px 1px azure; */
+    /* background: white; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 14px;
+
+}
+
+.box .title {
+    margin-bottom: 20px
+}
+
+.box input {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--bg);
+    color: var(--bg);
+    border-radius: 10px;
+    font-weight: 600;
+    font-family: Raleway;
+    margin-right: 10px;
+    transition: all 0.6s;
+}
+
+.box input:hover {
+    color: wheat;
+    background: var(--bg);
+    border: 1px solid var(--bg)
+}
+
+.t1 {
+    color: black;
+    opacity: 0.7;
+    display: inline-block;
+}
+
+.high {
+    display: inline-block;
+    margin: 10px 25px 10px 10px;
+    color: blue
+}
+
+.keyBtns {
+    display: none;
+}
+
+.container{
+    display: none;
+}
+#level{
+    font-size: small;
+    color: rgb(78, 71, 71);
+}
+
+.mobileBtns{
+    width:200px;
+    height:200px;
+    display: none;
+    /* border:1px solid red; */
+    margin: 0 auto;
+}
+.mobileBtns div{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.mobileBtns a{
+    display:inline-block;
+    font-size: 40px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 15px;
+}
+.mobileBtns .r1 a:nth-child(even),.mobileBtns .r3 a:nth-child(even),.mobileBtns .r2 a:nth-child(odd){
+    background-color: #ffffff;
+}
+.mobileBtns .r2 a:nth-child(2){
+    font-size: 45px;
+}
+@media screen and (max-width:708px) {
+    .level,
+    .box {
+        width: 95vw !important;
+    }
+
+    .buttons {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .buttons input {
+        margin: 10px;
+    }
+
+}
+
+@media screen and (max-width: 576px) {
+    .keyBtns {
+        display: flex;
+    }
+
+    .keyBtns input {
+        margin-top: 30px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 14vw;
+    }
+
+    #txt {
+        display: none;
+    }
+}
+
+@media screen and (max-width:501px) {
+    canvas{
+        width: 300px;
+        height: 300px;
+    }
+    .mobileBtns{
+        display: block !important;
+        margin-bottom: 25px;
+    }
+    .mobileBtns a{
+        transition: opacity 0.5s ease-in-out;
+    }
+    .op{
+        opacity:1
+    }
+    .op3{
+        opacity: 0.3;
+    }
+}
+    </style>
+</head>
+
+<body>
+
+    <h1>Snake Game</h1>
+    <div class="container">
+        <div class="upper">
+            <h3>Score: <span id="score"></span></h3>
+            <h3>High Score<span id="level"></span> :<span id="high-score">0</span></h3>
+        </div>
+        <canvas width="500" height="500"></canvas>
+        <div class="bottom">
+            <div class="mobileBtns">
+                <div class="r1">
+                    <a id="1">↖️</a>
+                    <a id="ArrowUp">⬆️</a>
+                    <a id="2">↗️</a>
+                </div>
+                <div class="r2">
+                    <a id="ArrowLeft">⬅️</a>
+                    <a id=" ">🛑</a>
+                    <a id="ArrowRight">➡️</a>
+                </div>
+                <div class="r3">
+                    <a id="3">↙️</a>
+                    <a id="ArrowDown">⬇️</a>
+                    <a id="4">↘️</a>
+                </div>
+            </div>
+            <h3><a href="http://rathodbh.netlify.app" target="_blank" class="red" id="pause">Click Here to more</a></h3>
+        </div>
+    </div>
+
+    <div class="level">
+        <div class="box">
+            <h1 class="title"> High Score </h1>
+            <div class="">
+                <div class="d">
+                    <h3 class="title t1">Easy: <h3 class="high high1">0</h3>
+                    </h3>
+                </div>
+                <div class="d">
+                    <h3 class="title t1">Medium: <h3 class="high high2">0</h3>
+                    </h3>
+                </div>
+                <div class="d">
+                    <h3 class="title t1">Hard: <h3 class="high high3">0</h3>
+                    </h3>
+                </div>
+                <div class="d">
+                    <h3 class="title t1">Very Hard: <h3 class="high high4">0</h3>
+                    </h3>
+                </div>
+
+            </div>
+            <h1 class="title">Select Level</h1>
+            <div class="buttons">
+                <input type="button" value="Easy" class="sbtn easy" style="--bg:green">
+                <input type="button" value="Medium" class="sbtn medium" style="--bg:blue">
+                <input type="button" value="Hard" class="sbtn hard" style="--bg:blueviolet">
+                <input type="button" value="Very Hard" class="sbtn vhard" style="--bg:red">
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+
+var hardness = 1
+var level = ""
+let speed
+
+// check highscore data from local storage
+if (localStorage.getItem("snakeCanvas-E"))
+    document.querySelector(".high1").innerHTML = localStorage.getItem("snakeCanvas-E");
+
+if (localStorage.getItem("snakeCanvas-M"))
+    document.querySelector(".high2").innerHTML = localStorage.getItem("snakeCanvas-M");
+
+if (localStorage.getItem("snakeCanvas-H"))
+    document.querySelector(".high3").innerHTML = localStorage.getItem("snakeCanvas-H");
+
+if (localStorage.getItem("snakeCanvas-V"))
+    document.querySelector(".high4").innerHTML = localStorage.getItem("snakeCanvas-V");
+
+//level buttons
+const allbtns = document.querySelectorAll(".sbtn");
+allbtns.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+
+        //set levels based on selected level and set speed and show high score on top bar
+        if (e.target.classList.contains("easy")) {
+            hardness = 2.5;
+            level = "Easy"
+            speed = 8
+            if (localStorage.getItem("snakeCanvas-E"))
+                document.querySelector("#high-score").innerHTML = localStorage.getItem("snakeCanvas-E");
+        }
+        else if (e.target.classList.contains("medium")) {
+            hardness = 2.5;
+            level = "Medium"
+            speed = 15
+            if (localStorage.getItem("snakeCanvas-M"))
+                document.querySelector("#high-score").innerHTML = localStorage.getItem("snakeCanvas-M");
+        }
+        else if (e.target.classList.contains("hard")) {
+            hardness = 1;
+            level = "Hard"
+            speed = 20
+            if (localStorage.getItem("snakeCanvas-H"))
+                document.querySelector("#high-score").innerHTML = localStorage.getItem("snakeCanvas-H");
+        }
+        if (e.target.classList.contains("vhard")) {
+            hardness = 1;
+            level = "vHard"
+            speed = 25
+            if (localStorage.getItem("snakeCanvas-V"))
+                document.querySelector("#high-score").innerHTML = localStorage.getItem("snakeCanvas-V");
+        }
+
+        document.querySelector(".container").style.display = "block";
+        document.querySelector(".level").style.display = "none";
+
+        //show level on game
+        document.querySelector("#level").innerHTML = `(${level})`;
+
+
+        //start game with all parts
+        runAllParts()
+    });
+})
+
+
+function runAllParts() {
+
+    const canvas = document.querySelector("canvas");
+    const ctx = canvas.getContext("2d");
+
+    var canvasWidth = canvas.width = 500
+    var canvasHeight = canvas.height = 500
+
+    if (window.innerWidth < 501) {
+        console.log("300");
+        canvasWidth = canvas.width = 300
+        canvasHeight = canvas.height = 300
+    }
+
+
+    var rows = 20 * hardness
+    var cols = 20 * hardness
+    var blockSize = canvasWidth / cols;
+
+    var snakeX = blockSize;
+    var snakeY = blockSize;
+    var snakeBody = []
+
+    var pause = false
+    var gameOver = false
+
+    var velocityX = 0;
+    var velocityY = 0;
+    var score = 0;
+
+    var foodX, foodY
+
+    let lastTime = 0;
+    let i = 0
+    let max = 7
+
+    drawFood()
+    startGame();
+    function startGame(time) {
+        requestAnimationFrame(startGame);
+        if (gameOver) return
+
+        if ((time - lastTime) / 1000 < (1 / speed)) return
+        lastTime = time;
+        i = (i < max) ? i = ++i : i = 0
+
+        update()
+
+        //mobile btns
+        document.querySelectorAll(".mobileBtns a").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                changeDirection(e.target.id)
+            })
+        })
+        document.addEventListener("keyup", changeDirection);
+
+    }
+
+    //update game and move snake
+    function update() {
+
+        //for rotate or reset the snake from 0 to 20 or 20 to 0
+        if (snakeX < 0) snakeX = (rows - 1) * blockSize
+        if (snakeX > (rows - 1) * blockSize) snakeX = 0
+        if (snakeY < 0) snakeY = (cols - 1) * blockSize
+        if (snakeY > (cols - 1) * blockSize) snakeY = 0
+
+        //board
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        let x = true
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < rows; j++) {
+                ctx.strokeStyle = "rgba(255,255,255,0.07)";
+                ctx.strokeRect(i * blockSize, j * blockSize, blockSize, blockSize)
+            }
+        }
+
+        //food
+        ctx.fillStyle = "red";
+        ctx.fillRect(foodX, foodY, blockSize, blockSize);
+
+        //head color
+        ctx.fillStyle = "white";
+
+        if (pause == false) {
+            //when food is eaten by the snake
+            if (snakeX == foodX && snakeY == foodY) {
+                snakeBody.push([foodX, foodY])
+                drawFood()
+            }
+            for (let i = snakeBody.length - 1; i > 0; i--) {
+                snakeBody[i] = snakeBody[i - 1]
+            }
+            if (snakeBody.length) {
+                snakeBody[0] = [snakeX, snakeY]
+            }
+
+            //change the position of the snake
+            snakeX += velocityX * blockSize;
+            snakeY += velocityY * blockSize;
+        }
+
+        ctx.fillStyle = "yellogreen"
+        ctx.fillRect(snakeX, snakeY, blockSize, blockSize);
+
+        snakeBody.forEach((element, index) => {
+            console.log(level);
+            //game over
+            if (element[0] == snakeX && element[1] == snakeY) {
+                gameOver = true
+
+                gameOverFun()
+            }
+
+            //bodyDesign
+            if (index % 2 == 0) {
+                ctx.fillStyle = "rgba(0,255,0,0.6)"
+            } else {
+                ctx.fillStyle = "rgba(0,255,0,0.9)";
+            }
+            ctx.fillRect(element[0], element[1], blockSize, blockSize);
+        })
+
+    }
+    function changeDirection(e) {
+        let curKey = e.key || e;
+        console.log(curKey, e);
+
+        if (curKey == "ArrowDown" && velocityY != -1) {
+            velocityX = 0; velocityY = 1
+        }
+        else if (curKey == "ArrowUp" && velocityY != 1) {
+            velocityX = 0; velocityY = -1
+        }
+        else if (curKey == "ArrowRight" && velocityX != -1) {
+            velocityX = 1; velocityY = 0
+        }
+        else if (curKey == "ArrowLeft" && velocityX != 1) {
+            velocityX = -1; velocityY = 0
+        }
+        else if (curKey == "1") {
+            velocityX = -1; velocityY = -1
+        }
+        else if (curKey == "2") {
+            velocityX = 1; velocityY = -1
+        }
+        else if (curKey == "3") {
+            velocityX = -1; velocityY = 1
+        }
+        else if (curKey == "4") {
+            velocityX = 1; velocityY = 1
+        }
+        else if (curKey == " ") {
+            pause = !pause
+            document.querySelector("#pause").innerHTML = pause ? "---GAME PAUSED---" : "click here to more..."
+        }
+
+    }
+
+    function drawFood() {
+        document.querySelector("#score").innerHTML = ++score
+        foodX = Math.floor(Math.random() * cols) * blockSize;
+        foodY = Math.floor(Math.random() * rows) * blockSize;
+    }
+
+
+    function gameOver_mode(item, lvl) {
+        if (localStorage.getItem(item) && level == lvl) {
+            if (score > parseInt(localStorage.getItem(item))) {
+                alert(`Well played,"You did new HIGH SCORE "\n Your score: ${score}`)
+                localStorage.setItem(item, score)
+            }
+            else {
+                alert("Game Over \n try again to create a new high score")
+            }
+        }
+        else if (level == lvl) {
+            alert("Game Over \n you are played first time in this mode"); localStorage.setItem(item, score)
+        }
+    }
+
+
+    function gameOverFun() {
+        gameOver_mode("snakeCanvas-E", "Easy")
+        gameOver_mode("snakeCanvas-M", "Medium")
+        gameOver_mode("snakeCanvas-H", "Hard")
+        gameOver_mode("snakeCanvas-V", "vHard")
+
+        window.location.reload();
+    }
+}
+    </script>
+</body>
+
+</html>

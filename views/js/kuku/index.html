@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>color Game</title>
+</head>
+
+<body>
+    <div class="timer"></div>
+    <div class="high-score"></div>
+    <div class="box">
+        <table>
+            <tr>
+                <td id="b1"></td>
+                <td id="b2"></td>
+                <td id="b3"></td>
+            </tr>
+            <tr>
+                <td id="b4"></td>
+                <td id="b5"></td>
+                <td id="b6"></td>
+            </tr>
+            <tr>
+                <td id="b7"></td>
+                <td id="b8"></td>
+                <td id="b9"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="score"></div>
+    <!-- <input type="button" value="Click Me" class="btnClick"> -->
+</body>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Itim&family=Poppins:ital,wght@0,300;0,400;0,600;1,100;1,200;1,300;1,600;1,900&family=Raleway:wght@700&display=swap'); 
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Itim', cursive;
+    /* font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; */
+}
+
+body{
+    height: 100vh;
+    background: linear-gradient(to bottom left,orange, rgb(164, 131, 69));
+    display: grid;
+    place-items:center ;
+}
+.high-score{
+    color: brown;
+    font-size: 23px;
+}
+.timer,.score{
+    color:#fff;
+    font-size: 40px;
+}
+.red{
+    color:brown
+}
+.box{
+    height: 60vh;
+    width: 60vh;
+    max-height: 100vh;
+    max-width: 80vh;
+
+}
+
+.btnClick{
+    padding: 10px 30px;
+    border-radius: 30px;
+    background-color: antiquewhite;
+    color:rgb(164, 131, 69);
+    border: 1px solid white;
+    transition: all 0.4s;
+}
+.btnClick:hover{
+    background: transparent;
+    border: 1px solid white;
+    color: white
+
+}
+
+table{
+    height: 100%;
+    width: 100%;
+    background: #fff;
+}
+table td{
+    border: 1px solid white;
+}
+</style>
+<script>
+    const mySel = (sel) => document.querySelector(sel);
+const mySelAll = (sel) => document.querySelectorAll(sel);
+
+let bhaveshTable = "";
+let bhaveshItem = 4;
+let bhaveshIndex = 0
+let bhaveshDimBtn = ""
+let bhaveshScore = 0;
+
+//functions
+const bhaveshRandomNums = (num) => {
+    return Math.floor(Math.random() * num) + 1
+}
+
+if (localStorage.getItem("color-high-score")) {
+    mySel(".high-score").innerText = "High score: " + localStorage.getItem("color-high-score")
+}
+
+let bhaveshColors = [
+    {
+        r: bhaveshRandomNums(255),
+        g: bhaveshRandomNums(255),
+        b: bhaveshRandomNums(255)
+    },
+    {
+        r: bhaveshRandomNums(255),
+        g: bhaveshRandomNums(255),
+        b: bhaveshRandomNums(255)
+    },
+    {
+        r: bhaveshRandomNums(255),
+        g: bhaveshRandomNums(255),
+        b: bhaveshRandomNums(255)
+    }, {
+        r: bhaveshRandomNums(255),
+        g: bhaveshRandomNums(255),
+        b: bhaveshRandomNums(255)
+    },
+    {
+        r: bhaveshRandomNums(255),
+        g: bhaveshRandomNums(255),
+        b: bhaveshRandomNums(255)
+    },
+    {
+        r: bhaveshRandomNums(255),
+        g: bhaveshRandomNums(255),
+        b: bhaveshRandomNums(255)
+    }
+]
+
+let bhaveshRandomDimId = bhaveshRandomNums(mySelAll("td").length);
+mySelAll("td")[bhaveshRandomDimId].style.opacity = "0.5";
+mySelAll("td")[bhaveshRandomDimId].classList.add("dimBtn");
+mySelAll("td").forEach((currentTd) => {
+    currentTd.style.background = `rgb(${bhaveshColors[0].r},${bhaveshColors[0].g},${bhaveshColors[0].b})`;
+})
+
+dim()
+
+
+function dim() {
+
+    // mySelAll("td")[bhaveshRandomDimId].addEventListener("click", () => {
+    mySel(".dimBtn").addEventListener("click", () => {
+
+        mySel(".score").innerHTML = `Score is: <span class="red">${++bhaveshScore}<span>`
+        mySel("table").parentNode.removeChild(mySel("table"))
+
+        bhaveshTable = "<table>";
+        let bhaveshRandomAllTdColor = bhaveshColors[bhaveshRandomNums(bhaveshColors.length - 1)];
+        console.log(bhaveshRandomAllTdColor);
+        for (let bhaveshi = 0; bhaveshi < bhaveshItem; bhaveshi++) {
+            bhaveshTable += "<tr>";
+            for (let bhaveshj = 0; bhaveshj < bhaveshItem; bhaveshj++) {
+                bhaveshTable += `<td style='height:${100 / bhaveshItem}%;width:${100 / bhaveshItem}%;background:rgb(${bhaveshRandomAllTdColor.r},${bhaveshRandomAllTdColor.g},${bhaveshRandomAllTdColor.b})' id="b${bhaveshIndex++}"></td>`;
+            }
+            bhaveshTable += "</tr>";
+        }
+        bhaveshTable += "</table>";
+        if (!(bhaveshItem >= 12))
+            bhaveshItem++;
+
+        mySel(".box").innerHTML = bhaveshTable;
+
+        let bhaveshTemp = bhaveshRandomNums(mySelAll("td").length - 1);
+        mySelAll("td")[bhaveshTemp].style.opacity = "0.7";
+        mySelAll("td")[bhaveshTemp].classList.add("dimBtn");
+
+        // bhaveshScore++;
+        dim();
+    })
+}
+
+
+
+let timer = 60;
+setInterval(() => {
+    mySel(".timer").innerText = timer--;
+    if (timer <= 10) {
+        setInterval(() => {
+            mySel(".timer").style.color = "transparent";
+
+            setInterval(() => {
+                mySel(".timer").style.color = "white";
+            }, 800)
+        }, 500)
+    }
+    if (timer <= -2) {
+        if (!localStorage.getItem("color-high-score") || localStorage.getItem("color-high-score") < bhaveshScore) {
+            localStorage.setItem("color-high-score", bhaveshScore)
+        }
+        alert("Game Over!!!!\n Your score is: " + (bhaveshScore));
+        window.location.reload();
+    }
+}, 1000)
+
+
+</script>
+
+</html>

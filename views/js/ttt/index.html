@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bh--Tic-Tac-Toe</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;1,100;1,200;1,300;1,600;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui;
+    font-family: 'Poppins', sans-serif;
+}
+body{
+    display: grid;
+    place-items: center;
+    background: white;
+    height: 100vh;
+}
+table.container{
+    width: 50vh;
+    aspect-ratio: 1/1;
+    border: 1px solid rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.07);
+    box-shadow:0px 0px 15px 10px rgba(0,0,0,0.2);
+    transition: 1.5s all;
+}
+table.container td{
+    width:33%;
+    height:33%;
+    border: 2px solid rgba(0,0,0,0.7);
+    border-radius: 15px;
+    /* padding:20px; */
+    font-size: 75px;
+    text-align: center; 
+    cursor: pointer;
+    transition: 1s background;
+}
+table.container td:hover{
+   transition: 0s;
+   background:  rgb(68, 68, 119);
+}
+table.container:hover {
+    transition: 0s;
+    /* border: 1px solid rgba(0,0,200,0.4); */
+    box-shadow:0px 0px 15px 7px rgba(0,0,200,0.2);
+}
+.btn{
+    padding: 10px 20px;
+    background: rgba(0,0,0,0.07);
+    box-shadow:0px 0px 15px 7px rgba(0,0,0,0.2);
+    border: 3px solid rgba(0,0,0,0.1);
+    color: rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: all 0.4s;
+    border-radius: 10px;
+    display: none;
+}
+
+.btn:hover{
+    color: blue;
+    border: 3px solid rgba(0,0,200,0.4);
+    box-shadow:0px 0px 15px 7px rgba(0,0,200,0.2);
+
+}
+.white{
+    background: white;
+}
+.silver{
+    background: silver;
+}
+    </style>
+</head>
+<body>
+    <h1 class="title">Tic Tac Toe</h1>
+    <table class="container">
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <input type="button" value="RESTART" class="btn" onclick="restartGame()">
+    <p id="result"></p>
+</body>
+<script>
+    let bhavesh_AllTd = document.querySelectorAll("td");
+let bhavesh_Index = 1;
+let bhavesh_Turn = true;
+let bhavesh_Sel = (sel) => document.querySelector(sel);
+let bhavesh_checkWin = 0;
+let bhavesh_XScore = 0;
+let bhavesh_OScore = 0;
+
+bhavesh_AllTd.forEach((bhavesh_currentTd) => {
+    bhavesh_currentTd.classList.add(bhavesh_Index++);
+
+    bhavesh_currentTd.addEventListener("click", () => {
+
+        if (!bhavesh_currentTd.classList.contains("clicked")) {
+
+            bhavesh_currentTd.innerText = (bhavesh_Turn) ? "X" : "O";
+            (bhavesh_Turn) ? bhavesh_currentTd.style.color = "green" : bhavesh_currentTd.style.color = "blue"
+
+            bhavesh_Turn = !bhavesh_Turn;
+            bhavesh_currentTd.classList.add("clicked");
+            checkPattern(bhavesh_currentTd.innerText);
+        }
+
+    })
+})
+
+const checkInnerPattern = (bhavesh1, bhavesh2, bhavesh3, bhavesh_symbol) => {
+
+    if (bhavesh_AllTd[bhavesh1].innerText == bhavesh_symbol && bhavesh_AllTd[bhavesh2].innerText == bhavesh_symbol && bhavesh_AllTd[bhavesh3].innerText == bhavesh_symbol) {
+        bhavesh_AllTd[bhavesh1].classList.add("silver");
+        bhavesh_AllTd[bhavesh2].classList.add("silver")
+        bhavesh_AllTd[bhavesh3].classList.add("silver")
+        bhavesh_checkWin++;
+
+        (bhavesh_symbol == "X") ? bhavesh_XScore++ : bhavesh_OScore++;
+
+        if (bhavesh_checkWin >= 1) {
+            alert("Player " + bhavesh_symbol + " Wins");
+            bhavesh_Sel(".btn").style.display = "block";
+            bhavesh_Sel("#result").innerHTML = 
+                `<h3 style="text-align:center">Score</h3>
+                    <br> Player X : ${bhavesh_XScore}
+                    <br> Player O : ${bhavesh_OScore}`;
+        }
+
+        //frozen other cells
+        bhavesh_AllTd.forEach((bhavesh__cur) => {
+            bhavesh__cur.classList.add("clicked")
+        })
+    }
+}
+
+const checkPattern = (bhavesh_symbol) => {
+    let bhavesh_Tie = 0;
+
+    checkInnerPattern(0, 1, 2, bhavesh_symbol);
+    checkInnerPattern(0, 3, 6, bhavesh_symbol);
+    checkInnerPattern(0, 4, 8, bhavesh_symbol);
+    checkInnerPattern(1, 4, 7, bhavesh_symbol);
+    checkInnerPattern(2, 5, 8, bhavesh_symbol);
+    checkInnerPattern(2, 4, 6, bhavesh_symbol);
+    checkInnerPattern(3, 4, 5, bhavesh_symbol);
+    checkInnerPattern(6, 7, 8, bhavesh_symbol);
+
+
+    bhavesh_AllTd.forEach((bhavesh_current) => {
+        if (bhavesh_current.innerText != "") {
+            bhavesh_Tie++;
+        }
+    })
+    console.log(bhavesh_checkWin);
+    if (bhavesh_Tie == 9 && bhavesh_AllTd[0].innerText != "" && bhavesh_checkWin == 0) {
+        alert("Tie");
+        bhavesh_Sel(".btn").style.display = "block";
+    }
+}
+
+const restartGame = () => {
+    // window.location.reload();
+    bhavesh_AllTd.forEach((cur) => {
+        cur.classList.remove("clicked");
+        cur.classList.remove("silver");
+        cur.innerText = "";
+        cur.classList.add("white");
+        // cur.style.background = white;
+    })
+    bhavesh_Sel(".btn").style.display = "none"
+    bhavesh_checkWin = 0;
+}
+
+</script>
+</html>

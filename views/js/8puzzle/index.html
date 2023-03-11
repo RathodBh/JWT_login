@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 Puzzle</title>
+</head>
+
+<body>
+    <div class="titleBox">
+        <h1 class="title">8 Puzzle</h2>
+        <p class="subtitle"></p>
+    </div>
+    <div class="container">
+        <button class="btn btn0"></button>
+        <button class="btn btn1"></button>
+        <button class="btn btn2"></button>
+        <button class="btn btn3"></button>
+        <button class="btn btn4"></button>
+        <button class="btn btn5"></button>
+        <button class="btn btn6"></button>
+        <button class="btn btn7"></button>
+        <button class="btn btn8 clear"></button>
+    </div>
+    <div class="bottom">
+        <h3 class="high-score"></h3>
+        <button class="reset">RESTART</button>
+    </div>
+</body>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;1,100;1,200;1,300;1,600;1,900&family=Raleway:wght@700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* font-family: 'Poppins', sans-serif; */
+    font-family: 'Raleway', sans-serif;
+}
+
+body {
+    height: 100vh;
+    /* background: #204051; */
+    background: #364F6B;
+    display: grid;
+    place-items: center;
+}
+
+.title,.subtitle,.high-score {
+    color: white;
+    text-align: center;
+    margin:20px;
+}
+.red{
+    color: #FC5185
+}
+.container {
+    width: 60vh;
+    height: 60vh;
+    /* border: 3px solid white; */
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+    /* background: #3B6978; */
+    background: #fff;
+}
+
+.container .btn {
+    width: 30%;
+    height: 30%;
+    font-size: 50px;
+    color: white;
+    outline: none;
+    border: none;
+    border-radius: 14px;
+    position: relative;
+    z-index: 2;
+    left: 0;
+    /* translate: -50% -50%; */
+    transition-property: all;
+    transition-duration: 0.4s;
+    transition-timing-function: linear;
+    /* background: #17B978; */
+    background: #FC5185;
+
+}
+
+.container .btn8.clear {
+    z-index: 1;
+    background: gainsboro
+}
+
+.reset {
+    padding: 10px 18px;
+    transition: all .4s;
+    border-radius: 10px;
+    visibility: hidden;
+}
+
+.reset:hover {
+    scale: 0.9
+}
+</style>
+
+<script>
+    //variables
+const mySel = (sel) => document.querySelector(sel);
+const allBtns = document.querySelectorAll(".btn");
+let allDataItems = [1, 2, 3, 4, 5, 6, 7, 8];
+let randNums = []
+let i = allDataItems.length;
+j = 0;
+
+let index = 0;
+let moves = 1;
+
+if(localStorage.getItem("high-score")){
+    mySel(".high-score").innerHTML = `Highest Score: <span class='red'> ${localStorage.getItem("high-score")} moves</span>`;
+}
+// functions
+//generated random order numbers
+while (i--) {
+    j = Math.floor(Math.random() * (i + 1));
+    randNums.push(allDataItems[j]);
+    allDataItems.splice(j, 1)
+}
+
+//works
+allBtns.forEach((curBtn) => {
+    // curBtn.style.order = index;
+    if (index != randNums.length) {
+        curBtn.innerText = randNums[index++]
+        // curBtn.style.background = "green"
+    }
+})
+
+allBtns.forEach((curBtn) => {
+    curBtn.addEventListener("click", (e) => {
+        if (!curBtn.classList.contains("btn8")) {
+
+            mySel(".subtitle").innerHTML = `moves: <span class="red">${moves++}</span>`;
+
+            let currentBtnIndex = [...allBtns].indexOf(curBtn);
+
+            if (currentBtnIndex == 0 || currentBtnIndex == 1 || currentBtnIndex == 3 || currentBtnIndex == 4 || currentBtnIndex == 6 || currentBtnIndex == 7) {
+                if (allBtns[currentBtnIndex + 1].classList.contains("btn8")) {
+                    curBtn.classList.add("btn8");
+                    curBtn.classList.add("clear");
+                    curBtn.classList.remove("btn" + currentBtnIndex);
+
+                    let tempNum = curBtn.innerText;
+                    curBtn.innerText = ""
+                    allBtns[currentBtnIndex + 1].classList.remove("btn8")
+                    allBtns[currentBtnIndex + 1].classList.add("btn" + currentBtnIndex);
+                    allBtns[currentBtnIndex + 1].classList.remove("clear");
+                    allBtns[currentBtnIndex + 1].innerText = tempNum;
+
+                    checkWin();
+                }
+            }
+            if (currentBtnIndex == 1 || currentBtnIndex == 2 || currentBtnIndex == 4 || currentBtnIndex == 5 || currentBtnIndex == 7 || currentBtnIndex == 8) {
+                if (allBtns[currentBtnIndex - 1].classList.contains("clear")) {
+
+                    let tmpClass = curBtn.classList[1];
+
+                    curBtn.classList.add("btn8");
+                    curBtn.classList.add("clear");
+                    curBtn.classList.remove(tmpClass);
+
+                    let tempNum = curBtn.innerText;
+                    curBtn.innerText = ""
+                    allBtns[currentBtnIndex - 1].classList.remove("btn8")
+                    allBtns[currentBtnIndex - 1].classList.add(tmpClass);
+                    allBtns[currentBtnIndex - 1].classList.remove("clear");
+
+                    allBtns[currentBtnIndex - 1].innerText = tempNum;
+
+                    checkWin()
+                }
+            }
+            //up
+            if (currentBtnIndex == 3 || currentBtnIndex == 4 || currentBtnIndex == 5 || currentBtnIndex == 6 || currentBtnIndex == 7 || currentBtnIndex == 8) {
+                if (allBtns[currentBtnIndex - 3].classList.contains("clear")) {
+
+                    let tmpClass = curBtn.classList[1];
+
+                    curBtn.classList.add("btn8");
+                    curBtn.classList.add("clear");
+                    curBtn.classList.remove(tmpClass);
+
+                    let tempNum = curBtn.innerText;
+                    curBtn.innerText = ""
+                    allBtns[currentBtnIndex - 3].classList.remove("btn8")
+                    allBtns[currentBtnIndex - 3].classList.add(tmpClass);
+                    allBtns[currentBtnIndex - 3].classList.remove("clear");
+
+                    allBtns[currentBtnIndex - 3].innerText = tempNum;
+
+                    checkWin()
+                }
+            }
+
+            //down
+            if (currentBtnIndex == 3 || currentBtnIndex == 4 || currentBtnIndex == 5 || currentBtnIndex == 1 || currentBtnIndex == 2 || currentBtnIndex == 0) {
+                if (allBtns[currentBtnIndex + 3].classList.contains("clear")) {
+
+                    let tmpClass = curBtn.classList[1];
+
+                    curBtn.classList.add("btn8");
+                    curBtn.classList.add("clear");
+                    curBtn.classList.remove(tmpClass);
+
+                    let tempNum = curBtn.innerText;
+                    curBtn.innerText = ""
+                    allBtns[currentBtnIndex + 3].classList.remove("btn8")
+                    allBtns[currentBtnIndex + 3].classList.add(tmpClass);
+                    allBtns[currentBtnIndex + 3].classList.remove("clear");
+
+                    allBtns[currentBtnIndex + 3].innerText = tempNum;
+
+                    checkWin()
+                }
+            }
+        }
+
+    })
+})
+
+function checkWin(){
+
+    let win = 0;
+    for(let i=0; i < allBtns.length; i++){
+        if(allBtns[i].innerHTML == i+1){
+            win++;
+        }
+    }
+    if(win==8){
+        alert("Finally You win with " + moves + " moves");
+        if(localStorage.getItem("high-score")){
+            if(moves < localStorage.getItem("high-score"))
+                localStorage.setItem("high-score",moves)
+        }else{
+            localStorage.setItem("high-score",moves);
+        }
+        mySel(".reset").style.visibility = "visible";
+        mySel(".subtitle").innerText = ""
+        moves = 1;
+        // window.location.reload()
+    }
+}
+
+mySel(".reset").addEventListener("click",()=>{
+   if(confirm("Are you sure want to restart ?")){
+    window.location.reload()
+   }
+})
+</script>
+</html>

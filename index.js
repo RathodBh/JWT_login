@@ -81,9 +81,9 @@ app.post('/login', async (req, res) => {
 
             res.cookie('user', token);
 
-            res.render('verify')
+            // res.render('/')
 
-            // res.redirect('/');
+            res.redirect('/');
         } else {
             res.render('login', { msg: '', emailErr: null, passErr: 'Password incorrect' });
         }
@@ -185,6 +185,25 @@ app.get("/verifyUserId", async (req, res) => {
     })
 
 })
+
+
+//-------------------------------ALL JS PROJECTS-------------------------------------------------------
+
+app.get('/js', async (req, res) => {
+    let name = req.query.name;
+    res.sendFile(__dirname + `/views/js/${name}/index.html`)
+});
+
+
+
+
+
+
+
+
+
+
+
 app.listen(3000, () => {
     console.log("listening on 3000");
 });

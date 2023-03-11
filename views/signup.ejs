@@ -69,6 +69,11 @@
         </div>
     </section>
     <script>
+
+        let pwdCHK = false;
+        let nameCHK = false;
+        let cpwdCHK = false;
+
         pwd.addEventListener("input", checkPwd);
         cpwd.addEventListener("input", check);
 
@@ -103,21 +108,23 @@
             }
             else {
                 passErr.innerText = "";
+                pwdCHK = true;
                 document.querySelector(".inner").style.display = "none";
             }
+            checkAll();
         }
         frm.addEventListener('submit', function (e) {
             check()
             let pwd = document.querySelector("#pwd").value;
             let cpwd = document.querySelector("#cpwd").value;
             let passErr = document.querySelector("#cpassErr");
-
+            
             document.querySelector(".inner").style.display = "block";
-
+            
             e.preventDefault();
 
             let a = 0;
-
+            
             if (pwd == cpwd) ++a;
 
             // let checkAllPwd = checkPwd();
@@ -127,25 +134,28 @@
             } else {
                 passErr.innerText = ""
                 document.querySelector(".inner").style.display = "none";
+                cpwdCHK = true;
             }
-
+            
+            checkAll();
             if (a == 1)
-                frm.submit()
-
+            frm.submit()
+            
         })
 
         function check(){
-            
             let pwd = document.querySelector("#pwd").value;
             let cpwd = document.querySelector("#cpwd").value;
             let passErr = document.querySelector("#cpassErr");
-
+            
             if (pwd != cpwd) {
                 document.querySelector("#btnSubmit").disabled = true
                 passErr.innerText = "Password and confirm password are not match"
             } else {
                 passErr.innerText = ""
+                cpwdCHK = true;
             }
+            checkAll();
         }
 
         //fetch API
@@ -159,9 +169,19 @@
                 document.querySelector("#nameErr").innerText = "Username already exists"
             }
             else{
-                document.querySelector("#btnSubmit").disabled = false
-                document.querySelector("#nameErr").innerText = ""
+                
+                document.querySelector("#nameErr").innerText = "";
+                nameCHK = true;
             }
+            checkAll();
         })
+
+        let mySel = (sel) => document.querySelector(sel)
+        function checkAll() {
+            if(nameCHK && pwdCHK && cpwdCHK) {
+                if(mySel("#nameErr").innerText == "" && mySel("#emailErr").innerText == "" && mySel("#passErr").innerText == "" && mySel("#cpassErr").innerText == "")
+                document.querySelector("#btnSubmit").disabled = false
+            }
+        }
     </script>
     <%- include("footer") -%>
