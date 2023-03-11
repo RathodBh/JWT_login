@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const ms = require('mysql2/promise');
 const cookieParser = require('cookie-parser');
 require('dotenv').config()
-
+const path = require('path');
 
 const app = express();
 
@@ -51,7 +51,7 @@ app.post('/signup', async (req, res) => {
         res.render('signup', { error: 'Email already exist' })
     } else {
         await conn.query(`INSERT INTO BH.jwt_login (name, email, pwd, verify) VALUES ('${b.name}','${b.email}','${pwd}','0')`);
-        res.render('login', { msg: 'Login successfully', err: null })
+        res.render('login', { msg: 'Login successfully', emailErr: null, err: null })
     }
 })
 
@@ -93,25 +93,27 @@ app.post('/login', async (req, res) => {
 })
 
 app.get('/', (req, res) => {
+    checkToken(req, res, "home", "Login successfully...");
+})
+
+function checkToken(req, res, filename, msg = "") {
     jwt.verify(req.cookies.user, process.env.SECRET_KEY, async (err, decoded) => {
         if (err) {
             res.render('login', { msg: '', emailErr: "You can't access without login", passErr: null });
         }
+        else {
+            let [sel] = await conn.query(`SELECT * FROM BH.jwt_login WHERE id = '${decoded.id}' and verify = '1'`);
 
-        let [sel] = await conn.query(`SELECT * FROM BH.jwt_login WHERE id = '${decoded.id}' and verify = '1'`);
-
-        if (sel.length > 0) {
-            res.render("home", { msg: "Login successfully...", user: decoded.name });
-        } else {
-            res.render("verify")
+            if (sel.length > 0) {
+                res.render(filename, { msg: msg, user: decoded.name });
+            } else {
+                res.render("verify")
+            }
         }
     });
-
-})
-
+}
 app.get('/logout', (req, res) => {
     res.clearCookie('user');
-
     res.redirect('login');
 })
 app.get("/update", (req, res) => {
@@ -191,7 +193,13 @@ app.get("/verifyUserId", async (req, res) => {
 
 app.get('/js', async (req, res) => {
     let name = req.query.name;
-    res.sendFile(__dirname + `/views/js/${name}/index.html`)
+    if (name) {
+        checkToken(req, res, 'home')
+        res.sendFile(__dirname + `/views/js/${name}/index.html`);
+
+    } else {
+        checkToken(req, res, 'home')
+    }
 });
 
 
@@ -201,9 +209,6 @@ app.get('/js', async (req, res) => {
 
 
 
-
-
-
-app.listen(3000, () => {
+app.listen(3001, () => {
     console.log("listening on 3000");
 });

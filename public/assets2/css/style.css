@@ -4,6 +4,17 @@
     --light-gray:#f9fbfe;
     --logo-bg:#f1f6fd;
 }
+html{
+    scroll-behavior: smooth; 
+}
+body,.wrapper{
+    scroll-behavior: smooth; 
+    scroll-snap-type: y mandatory; 
+}
+section{
+    scroll-snap-align: start none;
+    scroll-margin-block: 10px;
+}
 .logo-bg{
     background: var(--logo-bg)
 }
@@ -83,12 +94,22 @@
 }
 
 /* portfolio & testimonials */
+#portfolio{
+    scroll-margin-top: 80px;
+}
 #portCard,#testimonials-cards{
     transition: all .7s ease-in-out;
 }
 
-
-
+.port-img{
+    height: 370px;
+    aspect-ratio: 1/1;
+}
+.port-img img{
+    object-fit: cover;
+    height: 100%
+}
+    
 /* footer  */
 footer {
     background: var(--dark-blue)
